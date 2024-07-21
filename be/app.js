@@ -9,7 +9,7 @@ const corsOption = require('./config/corsOption' )
 //middleware
 const asyncHandler = require('express-async-handler')
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOption))
 
 
 //routes
