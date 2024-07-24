@@ -2,12 +2,14 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const connectDb = require('./config/connectDb')
-const bookRoutess = require('./routes/bookRoutes')
-const cors = require('cors')
+const authRoutes = require('./routes/authRoutes')
+const userRoutes = require('./routes/userRoutes')
+const bookRoutes = require('./routes/bookRoutes')
 const corsOption = require('./config/corsOption' )
 
 //middleware
 const asyncHandler = require('express-async-handler')
+const cors = require('cors')
 app.use(express.json())
 app.use(cors(corsOption))
 
@@ -18,7 +20,9 @@ app.get('/', (req, res) =>
         return res.status(200).send("welcome to Book store")
     })
 
-app.use('/books', bookRoutess)
+app.use('/auth', authRoutes)  
+app.use('/user', userRoutes)  
+app.use('/books', bookRoutes)
 
 const start = asyncHandler(async(req, res) =>
     {
