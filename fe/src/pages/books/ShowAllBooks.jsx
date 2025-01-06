@@ -7,6 +7,8 @@ import { SlMenu } from "react-icons/sl";
 import BooksTable from '../../components/BooksTable'
 import BooksCard from '../../components/BooksCard'
 
+import RefreshToken from '../../components/RefreshToken'
+
 const ShowAllBooks = () => 
 {
   const [books, setBooks] = useState([])
@@ -30,7 +32,7 @@ const ShowAllBooks = () =>
           {
             setBooks(res.data.bookData)
             // console.log(res.data.bookData);
-            console.log(res.data);
+            // console.log(res.data);
             setLoading(false)
           })
         .catch((error) => 
@@ -70,7 +72,13 @@ const ShowAllBooks = () =>
       {loading ? (
         <Spinner />
       ) : showType === 'card' ? (<BooksCard books={books}/>) : (<BooksTable books={books} />)}
+
+      
+          <RefreshToken />
+        
+
     </div>
+    
   )
 }
 
