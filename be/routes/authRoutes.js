@@ -76,18 +76,19 @@ router.post('/signin', asyncHandler(async(req, res) =>
             maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
         })
 
-        res.status(200).json({accessToken})
+        res.status(200).json({accessToken, refreshToken, user})
     }))
 
 router.get('/signin/refresh', asyncHandler(async(req, res) =>
     {
-        const cookies = req.cookies
-        if(!cookies)
+        const { cookie } = req.headers
+        if(!cookie)
             {
-                return res.status(401).json({ message: 'Unauthorized' })
+                return res.status(401).json({ message: 'No cookies' })
             }
-        console.log(cookies);
-        const refreshToken = cookies.jwt
+        console.log(cookie);
+        const refreshToken = cookie.split('jwt=')[1]
+        console.log(refreshToken);
         jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET,
@@ -97,11 +98,13 @@ router.get('/signin/refresh', asyncHandler(async(req, res) =>
                         {
                             return res.status(403).json({ message: 'Forbidden' })
                         }
-                    const user = await User.findOne({ email : decoded.email })
+                    console.log(decoded);                    
+                    const user = await User.findOne({ _id : decoded.uid })
                     if(!user)
                         {
                             return res.status(401).json({ message: 'Unauthorized' })
                         }
+                    console.log(user);                    
                     const accessToken = jwt.sign(
                         {                        
                             "uid" : user._id.toString()                 
